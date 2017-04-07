@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>CUSTOM-Debug DirectSpringMvcRestServiceTestGwt</actionName>
+        <displayName>Debug DirectSpringMvcRestServiceTestGwt</displayName>
+        <goals>
+            <goal>gwt:test</goal>
+        </goals>
+        <properties>
+            <jpda.listen>true</jpda.listen>
+        </properties>
+        <activatedProfiles>
+            <activatedProfile>spring-mvc-test-case-debugging</activatedProfile>
+        </activatedProfiles>  
+    </action>
+</actions>

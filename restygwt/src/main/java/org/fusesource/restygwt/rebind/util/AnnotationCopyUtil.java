@@ -20,6 +20,7 @@ package org.fusesource.restygwt.rebind.util;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
+import org.fusesource.restygwt.rebind.RestAnnotationValueProvider;
 
 /**
  * An utility class that gets a String representation of an annotation.
@@ -56,7 +57,7 @@ public class AnnotationCopyUtil {
             String encodedValue = encodeAnnotationValue(value);
 
             // Strip regex expressions from Path annotation value
-            if (javax.ws.rs.Path.class == annotation.annotationType()) {
+            if(RestAnnotationValueProvider.isPathValue(annotation, method)) {
                 encodedValue = encodedValue.replaceAll("\\{\\s*(\\S+)\\s*:\\s*[^{}]+\\}", "{$1}");
             }
 
@@ -106,6 +107,8 @@ public class AnnotationCopyUtil {
                 return readBooleanValue((Boolean) value);
             } else if (value instanceof Class) {
                 return readClassValue((Class) value);
+            } else if(value instanceof Enum) {
+                return value.getClass().getName() + "." + ((Enum)value).name();
             }
         }
 

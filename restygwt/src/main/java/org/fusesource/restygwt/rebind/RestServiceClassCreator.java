@@ -33,16 +33,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.HttpMethod;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
 import org.fusesource.restygwt.client.AbstractAsyncCallback;
 import org.fusesource.restygwt.client.AbstractRequestCallback;
 import org.fusesource.restygwt.client.Attribute;
@@ -140,6 +130,8 @@ public class RestServiceClassCreator extends BaseSourceCreator {
     private static final String METHOD_HEAD = "head";
     private static final String METHOD_GET = "get";
     private static final String METHOD_DELETE = "delete";
+    
+    private static final String APPLICATION_JSON = "application/json";
 
     /**
      * Set of allowed request methods.
@@ -304,19 +296,14 @@ public class RestServiceClassCreator extends BaseSourceCreator {
     }
 
     private static String getPathFromSource(HasAnnotations annotatedType) {
-        String path = null;
-
-        Path pathAnnotation = getAnnotation(annotatedType, Path.class);
-        if (pathAnnotation != null) {
-            path = pathAnnotation.value();
-        }
+        String pathValue = RestAnnotationValueProvider.getPathValue(annotatedType);
 
         RemoteServiceRelativePath relativePath = getAnnotation(annotatedType, RemoteServiceRelativePath.class);
         if (relativePath != null) {
-            path = relativePath.value();
+            pathValue = relativePath.value();
         }
 
-        return path;
+        return pathValue;
     }
 
     private String quote(String path) {
@@ -352,18 +339,18 @@ public class RestServiceClassCreator extends BaseSourceCreator {
     		getLogger().log(ERROR, "Invalid subresource locator method. Method must have return type of an interface that extends RestService: " + method.getReadableDeclaration());
             throw new UnableToCompleteException();
     	}
-
-        Path pathAnnotation = getAnnotation(method, Path.class);
-        if (pathAnnotation == null) {
+        
+        String pathValue = RestAnnotationValueProvider.getPathValue(method, getLogger());
+        if (pathValue == null) {
         	getLogger().log(ERROR, "Invalid subresource locator method. Method must have @Path annotation: " + method.getReadableDeclaration());
             throw new UnableToCompleteException();
         }
-        String pathExpression = wrap(pathAnnotation.value());
+        String pathExpression = wrap(pathValue);
 
         for (JParameter arg : method.getParameters()) {
-            PathParam paramPath = getAnnotation(arg, PathParam.class);
-            if (paramPath != null) {
-                pathExpression = pathExpression(pathExpression, arg, paramPath);
+            String paramPathValue = RestAnnotationValueProvider.getParamPathValue(arg);
+            if (paramPathValue != null) {
+                pathExpression = pathExpression(pathExpression, arg, paramPathValue);
             }
         }
 
@@ -390,9 +377,9 @@ public class RestServiceClassCreator extends BaseSourceCreator {
         i(-1).p("}");
     }
 
-    private String pathExpression(String pathExpression, JParameter arg, PathParam paramPath) throws UnableToCompleteException {
+    private String pathExpression(String pathExpression, JParameter arg, String paramPathValue) throws UnableToCompleteException {
         String expr = toStringExpression(arg);
-        return pathExpression.replaceAll(Pattern.quote("{" + paramPath.value()) + "(\\s*:\\s*([^{}][^{}]*))*\\}",
+        return pathExpression.replaceAll(Pattern.quote("{" + paramPathValue) + "(\\s*:\\s*([^{}][^{}]*))*\\}",
                 "\"+(" + expr + "== null? null : com.google.gwt.http.client.URL.encodePathSegment(" + expr + "))+\"");
     }
 
@@ -466,25 +453,25 @@ public class RestServiceClassCreator extends BaseSourceCreator {
             }
             JClassType resultType = getCallbackTypeGenericClass(callbackType);
 
+            String pathValue = RestAnnotationValueProvider.getPathValue(method, getLogger());
             String pathExpression = null;
-            Path pathAnnotation = getAnnotation(method, Path.class);
-            if (pathAnnotation != null) {
-                pathExpression = wrap(pathAnnotation.value());
+            if (pathValue != null) {
+                pathExpression = wrap(pathValue);
             }
-
+            
             JParameter contentArg = null;
             HashMap<String, JParameter> queryParams = new HashMap<String, JParameter>();
             HashMap<String, JParameter> formParams = new HashMap<String, JParameter>();
             HashMap<String, JParameter> headerParams = new HashMap<String, JParameter>();
 
             for (JParameter arg : args) {
-                PathParam paramPath = getAnnotation(arg, PathParam.class);
-                if (paramPath != null) {
+                String paramPathValue = RestAnnotationValueProvider.getParamPathValue(arg);
+                if (paramPathValue != null) {
                     if (pathExpression == null) {
                         getLogger().log(ERROR, "Invalid rest method.  Invalid @PathParam annotation. Method is missing the @Path annotation: " + method.getReadableDeclaration());
                         throw new UnableToCompleteException();
                     }
-                    pathExpression = pathExpression(pathExpression, arg, paramPath);
+                    pathExpression = pathExpression(pathExpression, arg, paramPathValue);
                     //.replaceAll(Pattern.quote("{" + paramPath.value() + "}"), "\"+com.google.gwt.http.client.URL.encodePathSegment(" + toStringExpression(arg) + ")+\"");
                     if (getAnnotation(arg, Attribute.class) != null) {
                         // allow part of the arg-object participate in as PathParam and the object goes over the wire
@@ -493,21 +480,21 @@ public class RestServiceClassCreator extends BaseSourceCreator {
                     continue;
                 }
 
-                QueryParam queryParam = getAnnotation(arg, QueryParam.class);
-                if (queryParam != null) {
-                    queryParams.put(queryParam.value(), arg);
+                String queryParamValue = RestAnnotationValueProvider.getQueryParamValue(arg);
+                if (queryParamValue != null) {
+                    queryParams.put(queryParamValue, arg);
                     continue;
                 }
 
-                FormParam formParam = getAnnotation(arg, FormParam.class);
-                if (formParam != null) {
-                    formParams.put(formParam.value(), arg);
+                String formParamValue = RestAnnotationValueProvider.getFormParamValue(arg);
+                if (formParamValue != null) {
+                    formParams.put(formParamValue, arg);
                     continue;
                 }
 
-                HeaderParam headerParam = getAnnotation(arg, HeaderParam.class);
-                if (headerParam != null) {
-                    headerParams.put(headerParam.value(), arg);
+                String headerParamValue = RestAnnotationValueProvider.getHeaderParamValue(arg);
+                if (headerParamValue != null) {
+                    headerParams.put(headerParamValue, arg);
                     continue;
                 }
 
@@ -582,14 +569,14 @@ public class RestServiceClassCreator extends BaseSourceCreator {
             String contentTypeHeaderValue = null;
 
             if(jsonpAnnotation == null) {
-                final String acceptHeader; 
-                Produces producesAnnotation = findAnnotationOnMethodOrEnclosingType(method, Produces.class);
-                if (producesAnnotation != null) {
+                final String acceptHeader;
+                String producesFirstValue = RestAnnotationValueProvider.getProducesFirstValue(method);
+                if (producesFirstValue != null) {
                     // Do not use autodetection, if accept type already set
-                    if (acceptTypeBuiltIn == null && autodetectTypeForStrings && producesAnnotation.value()[0].startsWith("text/")) {
+                    if (acceptTypeBuiltIn == null && autodetectTypeForStrings && producesFirstValue.startsWith("text/")) {
                         acceptTypeBuiltIn = "CONTENT_TYPE_TEXT";
                     }
-                    acceptHeader = wrap(producesAnnotation.value()[0]);
+                    acceptHeader = wrap(producesFirstValue);
                 } else {
                     // set the default accept header value ...
                     if (acceptTypeBuiltIn != null) {
@@ -600,9 +587,9 @@ public class RestServiceClassCreator extends BaseSourceCreator {
                 }
                 p("__method.header(" + RESOURCE_CLASS + ".HEADER_ACCEPT, " + acceptHeader + ");");
 
-                Consumes consumesAnnotation = findAnnotationOnMethodOrEnclosingType(method, Consumes.class);
-                if (consumesAnnotation != null) {
-                    contentTypeHeaderValue = consumesAnnotation.value()[0];
+                String consumesFirstValue = RestAnnotationValueProvider.getConsumesFirstValue(method);
+                if (consumesFirstValue != null) {
+                    contentTypeHeaderValue = consumesFirstValue;
                     int split = contentTypeHeaderValue.indexOf(',');
                     if (split > 0) {
                         contentTypeHeaderValue = contentTypeHeaderValue.substring(0, split).trim();
@@ -641,7 +628,7 @@ public class RestServiceClassCreator extends BaseSourceCreator {
 
             if (contentArg != null) {
                 if (contentArg.getType() == STRING_TYPE) {
-                    if (autodetectTypeForStrings && MediaType.APPLICATION_JSON.equals(contentTypeHeaderValue)) {
+                    if (autodetectTypeForStrings && APPLICATION_JSON.equals(contentTypeHeaderValue)) {
                         p("__method.json(new " + JSON_STRING_CLASS + "(" + contentArg.getName() + "));");
                     } else {
                         p("__method.text(" + contentArg.getName() + ");");
@@ -967,21 +954,7 @@ public class RestServiceClassCreator extends BaseSourceCreator {
      *             Valid means it is in the set {@link #REST_METHODS}
      */
     String getRestMethod(JMethod method) throws UnableToCompleteException {
-        String restMethod = null;
-
-        final Annotation[] annotations = method.getAnnotations();
-        for (Annotation annotation : annotations) {
-            HttpMethod httpMethod = annotation.annotationType().getAnnotation(HttpMethod.class);
-            // Check is HttpMethod
-            if (null != httpMethod) {
-                if (null != restMethod) {
-                    // Error, see description of HttpMethod
-                    getLogger().log(ERROR, "Invalid method. It is an error for a method to be annotated with more than one annotation that is annotated with HttpMethod: " + method.getReadableDeclaration());
-                    throw new UnableToCompleteException();
-                }
-                restMethod = httpMethod.value();
-            }
-        }
+        String restMethod = RestAnnotationValueProvider.getRestMethod(method, getLogger());
 
         if (null != restMethod) {
             // Allow custom methods later?
