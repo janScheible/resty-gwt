@@ -27,6 +27,8 @@
   <inherits name="com.google.gwt.xml.XML" />
   <inherits name='com.google.gwt.logging.LoggingDisabled'/>
   
+  <inherits name="org.fusesource.restygwt.RestyGwtShared" />
+  
   <inherits name="com.github.nmorel.gwtjackson.GwtJackson" />
 
 
@@ -41,7 +43,7 @@
     <when-type-assignable class="org.fusesource.restygwt.client.JsonEncoderDecoder" />
   </generate-with>
   <generate-with class="org.fusesource.restygwt.rebind.DirectRestServiceGenerator">
-    <when-type-assignable class="org.fusesource.restygwt.client.DirectRestService" />
+    <when-type-assignable class="org.fusesource.restygwt.shared.DirectRestService" />
   </generate-with>
 
   <define-configuration-property name="org.fusesource.restygwt.jsontypeidresolver" is-multi-valued="true"/>

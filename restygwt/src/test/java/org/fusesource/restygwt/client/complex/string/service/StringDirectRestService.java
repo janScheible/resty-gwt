@@ -18,7 +18,7 @@
 
 package org.fusesource.restygwt.client.complex.string.service;
 
-import org.fusesource.restygwt.client.DirectRestService;
+import org.fusesource.restygwt.shared.DirectRestService;
 
 public interface StringDirectRestService extends StringService, DirectRestService {
 }

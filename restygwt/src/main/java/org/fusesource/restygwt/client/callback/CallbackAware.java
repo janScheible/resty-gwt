@@ -24,7 +24,7 @@ import org.fusesource.restygwt.client.MethodCallback;
  * to call, they need to implement this interface.
  *
  * @see org.fusesource.restygwt.client.REST
- * @see org.fusesource.restygwt.client.DirectRestService
+ * @see org.fusesource.restygwt.shared.DirectRestService
  *
  * @author <a href="mailto:bogdan.mustiata@gmail.com">Bogdan Mustiata</a>
  */

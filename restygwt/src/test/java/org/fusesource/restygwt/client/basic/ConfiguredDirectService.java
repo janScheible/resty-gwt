@@ -18,7 +18,7 @@ package org.fusesource.restygwt.client.basic;
 
 import javax.ws.rs.GET;
 
-import org.fusesource.restygwt.client.DirectRestService;
+import org.fusesource.restygwt.shared.DirectRestService;
 import org.fusesource.restygwt.client.Options;
 import org.fusesource.restygwt.client.dispatcher.DefaultDispatcher;
 

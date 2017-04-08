@@ -3,7 +3,7 @@ package org.fusesource.restygwt.client.basic;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import org.fusesource.restygwt.client.DirectRestService;
+import org.fusesource.restygwt.shared.DirectRestService;
 
 /**
  * A service containing methods that return all primitive types.

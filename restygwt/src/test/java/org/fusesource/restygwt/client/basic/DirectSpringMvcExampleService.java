@@ -16,7 +16,7 @@
 package org.fusesource.restygwt.client.basic;
 
 import java.util.List;
-import org.fusesource.restygwt.client.DirectRestService;
+import org.fusesource.restygwt.shared.DirectRestService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;

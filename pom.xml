@@ -33,7 +33,7 @@
   <version>2.2.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   
-  <name>${project.artifactId}</name>
+  <name>restygwt</name>
   <description>RestyGWT is a GWT generator for REST services and JSON encoded data transfer objects</description>
 
   <properties>
@@ -311,6 +311,7 @@
 
   <modules>
     <module>restygwt</module>
+    <module>restygwt-shared</module>
   </modules>
 
 </project>

@@ -22,7 +22,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 
-import org.fusesource.restygwt.client.DirectRestService;
+import org.fusesource.restygwt.shared.DirectRestService;
 import org.fusesource.restygwt.client.OverlayCallback;
 import org.fusesource.restygwt.client.RestService;
 

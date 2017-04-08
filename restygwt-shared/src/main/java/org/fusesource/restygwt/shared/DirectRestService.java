@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.fusesource.restygwt.client;
+package org.fusesource.restygwt.shared;
 
 /**
  * @author <a href="mailto:bogdan.mustiata@gmail.com">Bogdan Mustiata</a>

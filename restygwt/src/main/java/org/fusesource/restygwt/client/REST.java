@@ -17,6 +17,7 @@
  */
 package org.fusesource.restygwt.client;
 
+import org.fusesource.restygwt.shared.DirectRestService;
 import org.fusesource.restygwt.client.callback.CallbackAware;
 
 /**
