@@ -1,7 +1,7 @@
 Purpose of this fork
 --------------------
 
-The purpose of this fork is to allow to use RestyGWT with Spring MVC annotations instead of JAX-RS annotations.
+The purpose of this fork is to allow usage of Spring MVC annotations with RestyGWT instead of JAX-RS annotations.
 It is targeted to a Spring only environment where GWT is used *just* as the frontend.
 The backend is pure Spring MVC without any GWT dependencies (see the sample projects [with-common-project](https://github.com/janScheible/resty-gwt-with-spring-mvc/tree/master/spring-boot-mvc-demo/with-common-project)  and [two-projects-only](https://github.com/janScheible/resty-gwt-with-spring-mvc/tree/master/spring-boot-mvc-demo/two-projects-only)).
 
