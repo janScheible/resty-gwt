@@ -5,6 +5,17 @@ The purpose of this fork is to allow usage of Spring MVC annotations with RestyG
 It is targeted to a Spring only environment where GWT is used *just* as the frontend.
 The backend is pure Spring MVC without any GWT dependencies (see the sample projects [with-common-project](https://github.com/janScheible/resty-gwt-with-spring-mvc/tree/master/spring-boot-mvc-demo/with-common-project)  and [two-projects-only](https://github.com/janScheible/resty-gwt-with-spring-mvc/tree/master/spring-boot-mvc-demo/two-projects-only)).
 
+```java
+public interface DirectSpringMvcExampleService extends DirectRestService {
+
+    @RequestMapping(path = "/entities/{id}", method = GET)
+    EntityDto getExampleDtos(@PathVariable("id") String id);
+
+    @RequestMapping(path = "/entities", method = POST, consumes = {"application/json"})
+    EntityDto storeDto(EntityDto entity);
+}
+```
+
 ![RestyGWT](http://resty-gwt.github.io/images/restygwt-logo.png)
 ==============
 
