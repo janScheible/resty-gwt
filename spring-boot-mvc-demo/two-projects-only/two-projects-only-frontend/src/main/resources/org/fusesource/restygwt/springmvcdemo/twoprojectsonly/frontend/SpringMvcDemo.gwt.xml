@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='springmvcdemo'>
+    <inherits name="com.google.gwt.user.User"/>
+    
+    <inherits name="org.fusesource.restygwt.RestyGWT"/>
+    
+    <entry-point class="org.fusesource.restygwt.springmvcdemo.twoprojectsonly.frontend.client.SpringMvcDemoModule" />
+    
+    <source path="client"/>
+    <source path="shared"/>
+</module>
