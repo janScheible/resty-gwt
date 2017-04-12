@@ -16,6 +16,11 @@ public interface DirectSpringMvcExampleService extends DirectRestService {
 }
 ```
 
+<dl>
+  <dt>NOTE</dt>
+  <dd>It looks like Spring MVC annotations on method arguments must be placed both on the interface and on the implementation class (on the interface for RestyGWT and on the implementation for Spring itself).</dd>
+</dl>
+
 ![RestyGWT](http://resty-gwt.github.io/images/restygwt-logo.png)
 ==============
 
