@@ -8,5 +8,8 @@
         <goals>
             <goal>gwt:run-codeserver</goal>
         </goals>
+        <activatedProfiles>
+            <activatedProfile>common-project-sources</activatedProfile>
+        </activatedProfiles>
     </action>   
 </actions>

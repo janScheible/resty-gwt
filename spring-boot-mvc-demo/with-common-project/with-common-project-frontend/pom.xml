@@ -145,4 +145,42 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>common-project-sources</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-extension-sources</id>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <!--
+                                        Add extension sources to allow GWT code server recompile it.
+                                        This is a recommended (https://groups.google.com/d/msg/codehaus-mojo-gwt-maven-plugin-users/zvJ0IlGN7Fw/RbyteSEKXtoJ)
+                                        workaround of a known bug of Maven GWT Plugin (https://jira.codehaus.org/browse/MGWT-332).
+                                        Source: https://github.com/codenvy-legacy/plugin-sdk/blob/master/codenvy-runner-sdk/src/main/resources/codenvyPlatform/pom.xml
+                                    -->
+                                    <sources>
+                                        <source>../with-common-project-common/src/main/java</source>
+                                        <source>../with-common-project-common/src/main/resources</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
