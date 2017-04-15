@@ -312,7 +312,6 @@
   <modules>
     <module>restygwt</module>
     <module>restygwt-shared</module>
-    <module>spring-boot-mvc-demo</module>
   </modules>
 
 </project>
