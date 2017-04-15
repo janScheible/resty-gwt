@@ -62,12 +62,10 @@
                     <groupId>org.springframework.boot</groupId>
                 </exclusion>
             </exclusions>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jetty</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -79,13 +77,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>
